@@ -2,7 +2,7 @@
 """
 Convert a filtered Sniffles2 VCF into two CSV files:
 
-  <sample>_common_svs.csv   -> DEL, INS, DUP, INV
+  <sample>_simple_svs.csv   -> DEL, INS, DUP, INV
       columns: chrom, start, stop, size, svtype, strand
   <sample>_complex_svs.csv  -> BND (translocations / complex rearrangements)
       columns: chrom1, start1, end1, chrom2, start2, end2, svtype
@@ -33,7 +33,7 @@ import pandas as pd
 STANDARD_CHROMS = {f"chr{i}" for i in range(1, 23)} | {"chrX", "chrY", "chrM"}
 STANDARD_CHROMS |= {str(i) for i in range(1, 23)} | {"X", "Y", "MT", "M"}
 
-COMMON_SVTYPES = {"DEL", "INS", "DUP", "INV"}
+SIMPLE_SVTYPES = {"DEL", "INS", "DUP", "INV"}
 COMPLEX_SVTYPES = {"BND", "TRA"}  # TRA included for tools that emit it
 
 # Matches the BND ALT spec, e.g. N[chr5:12345[, ]chr5:12345]N, etc.
@@ -96,13 +96,13 @@ def read_vcf_records(vcf_path: Path) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def build_common(df: pd.DataFrame) -> pd.DataFrame:
-    """Build the common-SV dataframe (DEL/INS/DUP/INV)."""
+def build_simple(df: pd.DataFrame) -> pd.DataFrame:
+    """Build the simple-SV dataframe (DEL/INS/DUP/INV)."""
     records = []
     for _, row in df.iterrows():
         info = parse_info(row["INFO"])
         svtype = info.get("SVTYPE", "")
-        if svtype not in COMMON_SVTYPES:
+        if svtype not in SIMPLE_SVTYPES:
             continue
 
         start = int(row["POS"])
@@ -184,16 +184,16 @@ def main() -> int:
     df = df[df["CHROM"].isin(STANDARD_CHROMS)].reset_index(drop=True)
     print(f"Dropped {n_before - len(df)} records on non-standard chromosomes.")
 
-    common_df = build_common(df)
+    simple_df = build_simple(df)
     complex_df = build_complex(df)
 
-    common_path = args.outdir / f"{args.sample}_common_svs.csv"
+    simple_path = args.outdir / f"{args.sample}_simple_svs.csv"
     complex_path = args.outdir / f"{args.sample}_complex_svs.csv"
 
-    common_df.to_csv(common_path, index=False)
+    simple_df.to_csv(simple_path, index=False)
     complex_df.to_csv(complex_path, index=False)
 
-    print(f"Wrote {len(common_df):>6d} common SVs   -> {common_path}")
+    print(f"Wrote {len(simple_df):>6d} simple SVs   -> {simple_path}")
     print(f"Wrote {len(complex_df):>6d} complex SVs  -> {complex_path}")
     return 0
 

@@ -22,7 +22,7 @@ python scripts/python/filter_vcf.py \
     -o "${OUTDIR}/${SAMPLE}.filtered.vcf"
 
 echo
-echo "==> 2. Convert VCF to CSV (common + complex SV tables)"
+echo "==> 2. Convert VCF to CSV (simple + complex SV tables)"
 python scripts/python/vcf_to_csv.py \
     "${OUTDIR}/${SAMPLE}.filtered.vcf" \
     --sample "${SAMPLE}" \
@@ -31,14 +31,14 @@ python scripts/python/vcf_to_csv.py \
 echo
 echo "==> 3. Plot histograms (no_filter, >1kb, >10kb)"
 python scripts/python/plot_histograms.py \
-    "${OUTDIR}/${SAMPLE}_common_svs.csv" \
+    "${OUTDIR}/${SAMPLE}_simple_svs.csv" \
     --sample "${SAMPLE}" \
     --outdir "${HISTDIR}"
 
 echo
 echo "==> 4. Plot histograms restricted to chr9, chr17, chr18"
 python scripts/python/plot_histograms.py \
-    "${OUTDIR}/${SAMPLE}_common_svs.csv" \
+    "${OUTDIR}/${SAMPLE}_simple_svs.csv" \
     --sample "${SAMPLE}" \
     --chroms chr9,chr17,chr18 \
     --outdir "${HISTDIR}/filtered_chrs"

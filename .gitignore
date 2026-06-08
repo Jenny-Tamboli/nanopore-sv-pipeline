@@ -40,3 +40,5 @@ venv/
 slurm-*.out
 slurm-*.err
 logs/
+original_scripts/
+.venv/

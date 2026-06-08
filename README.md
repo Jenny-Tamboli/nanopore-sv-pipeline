@@ -15,7 +15,7 @@ FASTQ ──► NGMLR ──► BAM ──► sort/index ──► Sniffles2 ─
                                               filter (PASS + PRECISE)
                                                           │
                                                           ▼
-                                              VCF → CSV (common + complex SVs)
+                                              VCF → CSV (simple + complex SVs)
                                                           │
                                             ┌─────────────┴─────────────┐
                                             ▼                           ▼
@@ -111,13 +111,13 @@ Standard chromosomes only (`chr1`–`chr22`, `chrX`, `chrY`, `chrM`). Non-standa
 
 Two CSVs per sample:
 
-**`<sample>_common_svs.csv`** — DEL, INS, DUP, INV
+**`<sample>_simple_svs.csv`** — DEL, INS, DUP, INV
 | chrom | start | stop | size | svtype | strand |
 
 **`<sample>_complex_svs.csv`** — BND (translocations / complex rearrangements)
 | chrom1 | start1 | end1 | chrom2 | start2 | end2 | svtype |
 
-> BNDs do not have an inherent length — they describe two breakend coordinates on (potentially) different chromosomes. Size-based filtering (`>1kb`, `>10kb`) is therefore applied only to common SVs, not BNDs.
+> BNDs do not have an inherent length — they describe two breakend coordinates on (potentially) different chromosomes. Size-based filtering (`>1kb`, `>10kb`) is therefore applied only to simple SVs, not BNDs.
 
 ---
 

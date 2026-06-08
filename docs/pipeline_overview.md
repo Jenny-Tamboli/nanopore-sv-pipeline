@@ -60,7 +60,7 @@ Override with `--chroms`.
 
 Splits records into two tables based on SVTYPE:
 
-- **Common SVs** (DEL, INS, DUP, INV) → one row per event with a meaningful
+- **Simple SVs** (DEL, INS, DUP, INV) → one row per event with a meaningful
   `size` field.
 - **Complex SVs** (BND, optionally TRA) → one row per breakend pair. No `size`
   is recorded because BNDs only describe two coordinates, possibly on different
@@ -90,6 +90,6 @@ expected by Circa's rectangle, scatter, and connection tracks.
 A BND record describes a single breakend (or a pair via the mate ID). The
 event has no inherent length — it is two genomic coordinates joined by
 evidence. `>1kb` / `>10kb` cutoffs are therefore only meaningful for the
-common-SV table.
+simple-SV table.
 
 For Circos, use the `no_filter` CSVs so translocations are still represented.

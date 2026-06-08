@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate histograms of structural-variant sizes from a common-SVs CSV.
+Generate histograms of structural-variant sizes from a simple-SVs CSV.
 
 For each (sample, cutoff) pair this writes one PNG showing size distribution
 faceted by SVTYPE. Cutoffs follow the report: no_filter, >1kb, >10kb.
@@ -9,7 +9,7 @@ BNDs are intentionally not handled here — they have no intrinsic length.
 Use the complex-SV CSV with Circos instead.
 
 Usage:
-    python plot_histograms.py results/mySample/mySample_common_svs.csv \
+    python plot_histograms.py results/mySample/mySample_simple_svs.csv \
         --sample mySample --outdir results/mySample/histplots/
 
     # restrict to specific chromosomes
@@ -135,7 +135,7 @@ def main() -> int:
     else:
         suffix = ""
 
-    print(f"Loaded {len(df)} common SVs from {args.csv}")
+    print(f"Loaded {len(df)} simple SVs from {args.csv}")
     for cutoff_name, cutoff_value in CUTOFFS.items():
         out = plot_one(
             df,
