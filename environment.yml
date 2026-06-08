@@ -1,0 +1,17 @@
+name: nanopore-sv
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - ngmlr=0.2.7
+  - samtools=1.19
+  - sniffles=2.2
+  - bcftools=1.19
+  - pysam>=0.22
+  - pandas>=2.0
+  - numpy>=1.24
+  - matplotlib>=3.7
+  - seaborn>=0.13
+  - pip

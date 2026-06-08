@@ -1,0 +1,42 @@
+# Results / large outputs
+results/
+*.bam
+*.bam.bai
+*.sam
+*.cram
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+
+# VCFs except the small test ones
+*.vcf
+*.vcf.gz
+*.vcf.gz.tbi
+!tests/data/*.vcf
+
+# Reference genomes
+*.fa
+*.fasta
+*.fa.gz
+*.fai
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# SLURM logs
+slurm-*.out
+slurm-*.err
+logs/
