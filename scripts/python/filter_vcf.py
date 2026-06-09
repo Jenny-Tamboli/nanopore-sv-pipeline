@@ -18,10 +18,13 @@ import sys
 from pathlib import Path
 from typing import Iterable
 
-# Standard human chromosomes (GRCh37/38). Override with --chroms if needed.
-STANDARD_CHROMS = {f"chr{i}" for i in range(1, 23)} | {"chrX", "chrY", "chrM"}
+# Numeric autosomes only (chr1-chr22). Sex chromosomes (chrX, chrY) and the
+# mitochondrion (chrM) are intentionally excluded — they behave differently
+# from autosomes (ploidy, recombination, repeat content) and are typically
+# analysed separately. Override with --chroms if needed.
+STANDARD_CHROMS = {f"chr{i}" for i in range(1, 23)}
 # Also accept the no-"chr" convention
-STANDARD_CHROMS |= {str(i) for i in range(1, 23)} | {"X", "Y", "MT", "M"}
+STANDARD_CHROMS |= {str(i) for i in range(1, 23)}
 
 
 def parse_args() -> argparse.Namespace:

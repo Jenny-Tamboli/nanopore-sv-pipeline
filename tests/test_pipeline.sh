@@ -1,7 +1,7 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
-# End-to-end demo: filter -> CSV -> histograms on the synthetic example VCF.
-# Run from the repo root:
+# End-to-end demo: filter -> CSV (1 kb) -> chromosome-normalized burden plot
+# on the synthetic example VCF. Run from the repo root:
 #   bash tests/test_pipeline.sh
 # -----------------------------------------------------------------------------
 
@@ -9,42 +9,32 @@ set -euo pipefail
 
 SAMPLE="test_sample"
 OUTDIR="results/${SAMPLE}"
-HISTDIR="${OUTDIR}/histplots"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${REPO_ROOT}"
 
-mkdir -p "${OUTDIR}" "${HISTDIR}"
+mkdir -p "${OUTDIR}"
 
-echo "==> 1. Filter VCF (PASS + PRECISE, standard chromosomes only)"
+echo "==> 1. Filter VCF (PASS + PRECISE, numeric autosomes only)"
 python scripts/python/filter_vcf.py \
     tests/data/example.vcf \
     -o "${OUTDIR}/${SAMPLE}.filtered.vcf"
 
 echo
-echo "==> 2. Convert VCF to CSV (simple + complex SV tables)"
+echo "==> 2. Convert VCF to CSVs (simple SVs with 1 kb filter + complex SVs)"
 python scripts/python/vcf_to_csv.py \
     "${OUTDIR}/${SAMPLE}.filtered.vcf" \
     --sample "${SAMPLE}" \
     --outdir "${OUTDIR}"
 
 echo
-echo "==> 3. Plot histograms (no_filter, >1kb, >10kb)"
+echo "==> 3. Plot per-chromosome SV burden (size-normalized)"
 python scripts/python/plot_histograms.py \
     "${OUTDIR}/${SAMPLE}_simple_svs.csv" \
+    --vcf "${OUTDIR}/${SAMPLE}.filtered.vcf" \
     --sample "${SAMPLE}" \
-    --outdir "${HISTDIR}"
+    --outdir "${OUTDIR}"
 
 echo
-echo "==> 4. Plot histograms restricted to chr9, chr17, chr18"
-python scripts/python/plot_histograms.py \
-    "${OUTDIR}/${SAMPLE}_simple_svs.csv" \
-    --sample "${SAMPLE}" \
-    --chroms chr9,chr17,chr18 \
-    --outdir "${HISTDIR}/filtered_chrs"
-
-echo
-echo "==> Done. See ${OUTDIR}/ for filtered VCF, CSVs, and histogram PNGs."
+echo "==> Done. Files in ${OUTDIR}/:"
 ls -la "${OUTDIR}"
-echo
-ls -la "${HISTDIR}"
