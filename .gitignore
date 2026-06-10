@@ -1,3 +1,6 @@
+# Downloaded test data (recreatable via scripts/download_test_data.sh)
+data/
+
 # Results / large outputs
 results/
 *.bam
@@ -40,5 +43,3 @@ venv/
 slurm-*.out
 slurm-*.err
 logs/
-original_scripts/
-.venv/
